@@ -1,4 +1,4 @@
-package catering.businesslogic.SummarySheet;
+package catering.businesslogic.summarySheet;
 
 import catering.businesslogic.recipe.KitchenJob;
 import catering.businesslogic.shift.*;

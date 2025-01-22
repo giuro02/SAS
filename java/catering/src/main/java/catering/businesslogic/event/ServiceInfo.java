@@ -1,5 +1,6 @@
 package catering.businesslogic.event;
 
+import catering.businesslogic.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import catering.persistence.PersistenceManager;
@@ -48,5 +49,8 @@ public class ServiceInfo implements EventItemInfo {
         });
 
         return result;
+    }
+
+    public User getHandler() {
     }
 }

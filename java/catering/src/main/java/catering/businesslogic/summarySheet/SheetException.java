@@ -1,4 +1,4 @@
 package catering.businesslogic.summarySheet;
 
-public class SheetException extends exception{
+public class SheetException extends Exception{
 }
