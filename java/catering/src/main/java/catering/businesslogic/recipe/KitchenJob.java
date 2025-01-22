@@ -1,4 +1,29 @@
 package catering.businesslogic.recipe;
 
-public class KitchenJob {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import catering.persistence.PersistenceManager;
+import catering.persistence.ResultHandler;
+
+public interface KitchenJob {
+    int getId();
+    String getName();
+    void setId(int id);
+    void setName(String name);
+
+    public static KitchenJob loadKitchenJobById(int id) {
+        String query = "SELECT * FROM KitchenJobs WHERE id = " + id;
+        KitchenJob ret[] = new KitchenJob[1];
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                if (rs.getString("type")!="prep")
+                    ret[0] = Recipe.getRecipe(rs.getInt("id"), rs.getString("name"));
+                else
+                    ret[0] = Preparation.getPreparation(rs.getInt("id"), rs.getString("name"));
+            }
+        });
+        return ret[0];
+    }
 }
