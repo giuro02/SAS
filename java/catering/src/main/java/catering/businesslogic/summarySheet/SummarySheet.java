@@ -35,27 +35,29 @@ public class SummarySheet {
         this.taskList = new ArrayList<>();
 
         Menu menu = service.getMenu();
+
         for (MenuItem mi : menu.getFreeItems()) {
             Recipe recipe = mi.getItemRecipe();
-            Task task = new Task(recipe);
+            Task task = new Task(recipe); //perchè è rosso?? io devo creare un task mettendogli dentro le recipe
             taskList.add(task);
-            for (KitchenJob kj : recipe.getPreparations()) {
+            /*for (KitchenJob kj : recipe.getPreparations()) {
                 Task task2 = new Task(kj);
                 taskList.add(task2);
-            }
+            }*/
         }
 
         for (Section s : menu.getSections()) {
             for (MenuItem mi : s.getItems()) {
                 Recipe recipe = mi.getItemRecipe();
-                Task task = new Task(recipe);
+                Task task = new Task(recipe); //anche qua stesso quesito di sopra
                 taskList.add(task);
-                for (KitchenJob kj : recipe.getPreparations()) {
+                /*for (KitchenJob kj : recipe.getPreparations()) {
                     Task task2 = new Task(kj);
                     taskList.add(task2);
-                }
+                }*/
             }
         }
+        /* non devo fare return di sheet?? */
     }
 
     public int getId() {
@@ -82,21 +84,21 @@ public class SummarySheet {
         Task t = new Task(kj);
         ArrayList<Task> newTasks = new ArrayList<Task>();
         newTasks.add(t);
-        if (kj instanceof Recipe) {
+        /*if (kj instanceof Recipe) {
             for (KitchenJob job : ((Recipe)kj).getPreparations()) {
                 t = new Task(job);
                 newTasks.add(t);
             }
-        }
+        }*/
         taskList.addAll(newTasks);
         return newTasks;
     }
 
     public void setTask(Task task, int position) {
         int pos = taskList.indexOf(task);
-        Task oldTask = taskList.set(position, task);
-        taskList.add(position + 1, oldTask);
-        taskList.remove(position < pos ? pos + 1 : pos);
+        Task oldTask = taskList.set(position, task); // Sostituisci l'elemento alla posizione desiderata con il task e salva l'elemento sostituito
+        taskList.add(position + 1, oldTask); // Inserisci l'elemento sostituito nella posizione successiva
+        taskList.remove(position < pos ? pos + 1 : pos); //rimuovi l'elemento duplicato
     }
 
     public boolean containsTask(Task task) {
@@ -108,16 +110,15 @@ public class SummarySheet {
     }
 
     public int removeTask(Task task) {
-        task.removeShift();
+        task.removeShift(task.getShift()); //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
         taskList.remove(task);
         return ret;
     }
 
-    public SummarySheet regenerateSheet() {
-        this.taskList.clear();
-        SummarySheet newSheet= new SummarySheet(this.service, this.owner);
-        return newSheet;
+    //funzione getMenu()
+    public Menu getMenu() {
+        return service.getMenu();
     }
 
     public String testString() {

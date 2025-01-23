@@ -22,6 +22,7 @@ public class Task {
     private KitchenJob job;
     private User cook;
     private KitchenShift shift;
+    //noi forse dobbiamo anche collegarlo a FloorJob???
 
     private Task() {
 
@@ -64,7 +65,7 @@ public class Task {
     public User getCook() {
         return cook;
     }
-
+//tutti questi set sono gli attributi che setto quando creo la task da summarySheet
     public void setEstimatedTime(int estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
@@ -85,34 +86,35 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/ Shift objShiftAssignment) {
-        if(objShiftAssignment.getCook()!=null)
-            this.setCook(objShiftAssignment.getCook());
+    public void assignShift(/*DTOShiftAssignment*/ KitchenShift shift) { //da capire
+        if(shift.getCook()!=null)
+            this.setCook(shift.getCook());
 
-        if(objShiftAssignment.getShift()!=null) {
+        if(shift.getShift()!=null) {
 
             if(this.shift!=null)
                 this.shift.removeTask(this);
 
-            objShiftAssignment.getShift().addTask(this);
-            this.setShift(objShiftAssignment.getShift());
+            shift.getShift().addTask(this);
+            this.setShift(shift.getShift());
         }
 
-        if(objShiftAssignment.getEstimatedTime()!=null)
-            this.setEstimatedTime(objShiftAssignment.getEstimatedTime());
+        if(shift.getEstimatedTime()!=null)
+            this.setEstimatedTime(shift.getEstimatedTime());
 
-        if(objShiftAssignment.getPortions()!=null)
-            this.setPortions(objShiftAssignment.getPortions());
+        if(shift.getPortions()!=null)
+            this.setPortions(shift.getPortions());
 
-        if(objShiftAssignment.getPreparedPortions()!=null)
-            this.setReadyPortions(objShiftAssignment.getPreparedPortions());
+        if(shift.getReadyPortions()!=null)
+            this.setReadyPortions(shift.getReadyPortions());
     }
 
-    public boolean removeShift() {
+    public boolean removeShift(Shift shift) {//glielo metto dentro se teniamo che un task può avere più shifts
         boolean ret = false;
         if (shift != null) {
             ret = this.shift.removeTask(this);
         }
+        //noi nei DSD non lo facciamo, ste si, che famo? lo togliamo?:
         if (ret == true) {
             this.shift = null;
             this.cook = null;

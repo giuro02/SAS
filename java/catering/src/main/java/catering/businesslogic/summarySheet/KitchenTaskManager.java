@@ -28,7 +28,6 @@ public class KitchenTaskManager{
         this.eventReceivers.remove(rec);
     }
 
-
     public SummarySheet createNewSheet(ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
         if(!user.isChef()||!user.equals(service.getHandler()))
@@ -77,7 +76,7 @@ public class KitchenTaskManager{
     public SummarySheet orderTask(Task task, int pos) throws UseCaseLogicException{ //TODO come ordiniamo?
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
-        if(getTaskList)
+
         this.currentSheet.setTask(task, pos);
 
         this.notifyOrderedTasks(this.currentSheet);
@@ -89,39 +88,42 @@ public class KitchenTaskManager{
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
-        return this.currentSheet.;
+        return this.currentSheet.getService().getKitchenShifts(); //come ha fatto ste, passando da service, tanto penso che
     }
 
-/*la funzione più simile di ste è questa*/
-    /*public ArrayList<KitchenShift> viewShifts() throws UseCaseLogicException{
-        if(this.currentSheet==null)
-            throw new UseCaseLogicException();
-
-        return this.currentSheet.getService().getKitchenShifts();
-    }*/
-
     public void assignTask(Task task, KitchenShift shift) throws UseCaseLogicException, SheetException {
-
+//assegno il task (che è un compito di cucina) al kitchenShift
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
 
-        if(shift.enoughTime(task.getEstimatedTime()))
+        if(shift.enoughTime(task.getEstimatedTime())) //assegno il task allo shift solo se lo shift ha abbastanza tempo a disposizione
             task.assignShift(shift);
 
         this.notifyTaskAssigned(task, shift);
     }
 
-    public void deleteAssignment(Task task, Shift shift) throws UseCaseLogicException, SheetException {
+    //TODO da finire
+    public void modifyInfoTaskAssignment(Task task, User cook, Integer estimatedTime, String portions, String preparedPortions) throws UseCaseLogicException, SheetException {
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
 
-        task.removeShift(shift);
+        this.notifyTaskInfoModified(task);
+    }
+
+    public void deleteAssignment(Task task, KitchenShift shift) throws UseCaseLogicException, SheetException {
+        if(this.currentSheet==null)
+            throw new UseCaseLogicException();
+
+        if(!this.currentSheet.containsTask(task))
+            throw new SheetException();
+
+        task.removeShift(shift); //glielo metto dentro se teniamo che un task può avere più shifts
 
         this.notifyTaskAssignmentDeleted(task, shift);
     }
@@ -162,7 +164,7 @@ public class KitchenTaskManager{
         }
     }
 
-    private void notifyTaskDeleted(SummarySheet sheet, Task task /*int pos*/) {
+    private void notifyTaskDeleted(SummarySheet sheet, Task task, /*int pos*/int pos) {
         for (KitchenTaskEventReceiver er : this.eventReceivers) {
             er.updateTaskDeleted(sheet, task, pos);
         }
