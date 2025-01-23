@@ -1,5 +1,6 @@
 package catering.businesslogic.summarySheet;
 
+import catering.businesslogic.shift.KitchenShift;
 import catering.persistence.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
 
@@ -109,9 +110,10 @@ public class SummarySheet {
         return owner.equals(user);
     }
 
-    public int removeTask(Task task) {
-        task.removeShift(task.getShift()); //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
+    public int removeTask(Task task, KitchenShift shift) {
+         //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
+        task.removeShift(shift, ret);
         taskList.remove(task);
         return ret;
     }

@@ -65,10 +65,16 @@ public class KitchenTaskManager{
         return createdTasks;
     }
 
-    public void deleteTask(Task task) throws UseCaseLogicException {
+    public void deleteTask(Task task, KitchenShift shift) throws UseCaseLogicException {
         if (this.currentSheet == null)
             throw new UseCaseLogicException();
-        int pos = currentSheet.removeTask(task);
+        int pos = currentSheet.removeTask(task, shift);
+
+        int i = 0;
+        for(i=pos; i < task.getShift().getTasksList().size(); i++) {
+            //aggiorno le posizioni indietro di uno -- passando sulla lista dei task dal turno associato al task
+            currentSheet.setTask(task.getShift().getTasksList().get(i), i-1);
+        }
 
         this.notifyTaskDeleted(currentSheet, task, pos);
     }
@@ -122,8 +128,11 @@ public class KitchenTaskManager{
 
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
-
-        task.removeShift(shift); //glielo metto dentro se teniamo che un task può avere più shifts
+        //MA SE NOI NON ABBIAMO SOLO UN TASK PER UN TURNO NON HA SENSO ELIMINARE IL TURNO A MENO CHE IL TASK
+        //CHE STIAMO RIMUOVENDO NON SIA L'ULTIMO DEL TURNO (UN TURNO SENZA TASK NON CREDO ABBIA SENSO DI
+        //ESISTERE)
+        //if(shift.getTasksList().size()  )
+        task.removeShift(shift, task)); //glielo metto dentro se teniamo che un task può avere più shifts
 
         this.notifyTaskAssignmentDeleted(task, shift);
     }

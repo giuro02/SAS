@@ -86,7 +86,7 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/ KitchenShift shift) { //da capire
+    public void assignShift(/*DTOShiftAssignment*/ KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo
         if(shift.getCook()!=null)
             this.setCook(shift.getCook());
 
@@ -109,10 +109,20 @@ public class Task {
             this.setReadyPortions(shift.getReadyPortions());
     }
 
-    public boolean removeShift(Shift shift) {//glielo metto dentro se teniamo che un task può avere più shifts
+    public boolean removeShift(KitchenShift shift, Task task ) /*int pos*/{//glielo metto dentro se teniamo che un task può avere più shifts
         boolean ret = false;
+        int pos = shift.getTaskIndex(String.valueOf(task));
+
         if (shift != null) {
             ret = this.shift.removeTask(this);
+            int i = shift.getTasksList().size();
+            if( pos == i){      //non ci sono più task nel turno
+                //elimina turno
+            }else {
+                for (i = pos; i < shift.getTaskList().size(); i++) {  //per tutti i task dalla posizione di quello cancellato in poi
+                    shift.getTasksList().set(i-1,shift.getTasksList().get(i) ); //aggiorno posizioni task dello shift corrente dopo la rimozione di uno di essi
+                }
+            }
         }
         //noi nei DSD non lo facciamo, ste si, che famo? lo togliamo?:
         if (ret == true) {
@@ -202,4 +212,3 @@ public class Task {
         return result;
     }
 }
-

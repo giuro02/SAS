@@ -62,6 +62,10 @@ public class KitchenShift extends Shift {
         return difference >= estimatedTime;
     }
 
+    public int getTaskIndex(String task) {
+        return taskList.indexOf(task); // Restituisce -1 se il task non è trovato
+    }
+
     @Override
     public String toString(){
         return super.toString()+ (place != null ? " - luogo del turno: "+this.place : "");
