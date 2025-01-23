@@ -85,7 +85,7 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(DTOShiftAssignment objShiftAssignment) {
+    public void assignShift(/*DTOShiftAssignment*/ Shift objShiftAssignment) {
         if(objShiftAssignment.getCook()!=null)
             this.setCook(objShiftAssignment.getCook());
 
