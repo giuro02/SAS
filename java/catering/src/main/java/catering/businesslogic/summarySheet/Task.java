@@ -21,7 +21,7 @@ public class Task {
     private String readyPortions;
     private KitchenJob job;
     private User cook;
-    private KitchenShift shift;
+    private KitchenShift shift; //fose qua è Shift non kitchenShift
 
     public void setId(int id) {
         this.id = id;
@@ -50,7 +50,7 @@ public class Task {
         return id;
     }
 
-    public int getEstimatedTime() {
+    public Integer getEstimatedTime() {
         return estimatedTime;
     }
 
@@ -66,7 +66,7 @@ public class Task {
         return job;
     }
 
-    /*public Shift getShift() {
+    /*public Shift getShift() { //uso questo se sopra dichiaro shift come Shift e non KitchenShift
         return shift;
     }*/
     public KitchenShift getShift() {
@@ -96,9 +96,9 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/  KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo
-        if(this.getCook()!=null)
-            this.setCook(this.getCook());
+    public void assignShift(/*DTOShiftAssignment*/  Shift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
+        /*if(this.getCook()!=null)
+            this.setCook(this.getCook());*/
 
         if(this.getShift()!=null) {
 
@@ -109,19 +109,19 @@ public class Task {
             this.setShift( this.getShift() );
         }
 
-        if(this.getEstimatedTime()!=null)
+        /*if(this.getEstimatedTime()!=null)
             this.setEstimatedTime(this.getEstimatedTime());
 
         if(this.getPortions()!=null)
             this.setPortions(this.getPortions());
 
         if(this.getReadyPortions()!=null)
-            this.setReadyPortions(this.getReadyPortions());
+            this.setReadyPortions(this.getReadyPortions());*/
     }
-
+//Se qua metto Shift invece di KitcehnShift mi da mille errori perchè Shift non ha il metodo getTaskIndex e se glielo creo non riesce a prendere la taskList perchè
     public boolean removeShift(KitchenShift shift, Task task ) /*int pos*/{//glielo metto dentro se teniamo che un task può avere più shifts
         boolean ret = false;
-        int pos = shift.getTaskIndex(String.valueOf(task));
+        int pos = shift.getTaskIndex(task);
 
         if (shift != null) {
             ret = this.shift.removeTask(this);
@@ -135,13 +135,13 @@ public class Task {
             }
         }
         //noi nei DSD non lo facciamo, ste si, che famo? lo togliamo?:
-        if (ret == true) {
+        /*if (ret == true) {
             this.shift = null;
             this.cook = null;
             this.estimatedTime = -1;
             this.portions = null;
             this.readyPortions = null;
-        }
+        }*/
         return ret;
     }
 

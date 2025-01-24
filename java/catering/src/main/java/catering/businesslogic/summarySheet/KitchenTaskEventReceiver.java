@@ -12,6 +12,4 @@ public class KitchenTaskEventReceiver  {
     public void updateTaskDeleted(SummarySheet sheet, Task task, int pos); //int pos
     public void taskInfoModified(Task task);
 
-    public void updateRegenerateSheet(SummarySheet currentSheet) {
-    }
 }

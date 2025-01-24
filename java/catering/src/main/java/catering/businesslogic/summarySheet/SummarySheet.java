@@ -110,7 +110,7 @@ public class SummarySheet {
         return owner.equals(user);
     }
 
-    public int removeTask(Task task, KitchenShift shift) {
+    public int removeTask(Task task, KitchenShift shift) { //solo Shift?
          //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
         task.removeShift(shift, task);  

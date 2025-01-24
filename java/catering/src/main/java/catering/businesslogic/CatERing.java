@@ -30,6 +30,8 @@ public class CatERing {
         userMgr = new UserManager();
         eventMgr = new EventManager();
         menuPersistence = new MenuPersistence();
+        //kitchenTaskMgr = new KitchenTaskManager();
+        //c'è da aggiungere roba qua, guarda da ste
 
         menuMgr.addEventReceiver(menuPersistence);
     }
@@ -49,5 +51,5 @@ public class CatERing {
 
     public EventManager getEventManager() { return eventMgr; }
 
-    public KitchenTaskManager getShiftManager() { return shiftMgr; }
+    //public KitchenTaskManager getKitchenTaskManager() { return kitchenTaskMgr; }
 }

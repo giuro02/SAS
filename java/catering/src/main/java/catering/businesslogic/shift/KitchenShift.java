@@ -62,7 +62,7 @@ public class KitchenShift extends Shift {
         return difference >= estimatedTime;
     }
 
-    public int getTaskIndex(String task) {
+    public int getTaskIndex(Task task) {
         return taskList.indexOf(task); // Restituisce -1 se il task non è trovato
     }
 
@@ -91,7 +91,7 @@ public class KitchenShift extends Shift {
     public void addTask(Task task) {
         if (task != null) {
             super.addTask(task); // Usa il metodo della classe base
-            System.out.println("Task aggiunto a KitchenShift: " + task.getName());
+            System.out.println("Task aggiunto a KitchenShift: " + task.getId());
         } else {
             System.out.println("Errore: il task non può essere null.");
         }

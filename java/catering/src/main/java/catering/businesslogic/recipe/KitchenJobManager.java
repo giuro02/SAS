@@ -6,14 +6,14 @@ public class KitchenJobManager {
 
     public KitchenJobManager() {
         Recipe.loadAllRecipes();
-        Preparation.loadAllPreparations();
+        //Preparation.loadAllPreparations();
     }
 
     public ArrayList<Recipe> getRecipes() {
-        return Recipe.getAllRecipes();
+        return (ArrayList<Recipe>) Recipe.getAllRecipes();
     }
 
-    public ArrayList<Preparation> getPreparations(){
+    /*public ArrayList<Preparation> getPreparations(){
         return Preparation.getAllPreparations();
-    }
+    }*/
 }
