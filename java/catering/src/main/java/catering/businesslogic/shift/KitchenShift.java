@@ -31,6 +31,10 @@ public class KitchenShift extends Shift {
         return taskList;
     }
 
+    public void setTaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
+    }
+
     public String getPlace(){
         return place;
     }
@@ -38,13 +42,11 @@ public class KitchenShift extends Shift {
     public void setPlace(String place) {
         this.place = place;
     }
-    public void setTaskList(ArrayList<Task> taskList) {
-        this.taskList = taskList;
-    }
 
-    /*public boolean addTask(Task task){
+
+    public boolean addTask(Task task){
         return taskList.add(task);
-    }*/
+    }
 
     public boolean removeTask(Task task){
         return taskList.remove(task);
@@ -87,15 +89,15 @@ public class KitchenShift extends Shift {
         return result;
     }
 
-    @Override
-    public void addTask(Task task) {
+    //@Override
+    /*public void addTask(Task task) {
         if (task != null) {
             super.addTask(task); // Usa il metodo della classe base
-            System.out.println("Task aggiunto a KitchenShift: " + task.getId());
+            System.out.println("Task aggiunto a KitchenShift: " + task); //come gli passiamo il nome
         } else {
             System.out.println("Errore: il task non può essere null.");
         }
-    }
+    }*/
 
     // Metodo per ottenere i task (opzionale)
     public ArrayList<Task> getKitchenShift() {

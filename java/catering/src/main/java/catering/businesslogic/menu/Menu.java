@@ -81,6 +81,90 @@ public class Menu {
 
     }
 
+    public static Menu loadMenuById(int menu_id) {
+        Menu menu;
+        if (loadedMenus.containsKey(menu_id)) {
+            menu = loadedMenus.get(menu_id);
+            String query = "SELECT * FROM Menus WHERE id = " + menu_id;
+            PersistenceManager.executeQuery(query, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.title = rs.getString("title");
+                    menu.published = rs.getBoolean("published");
+                }
+            });
+
+            // load features
+            menu.featuresMap.clear();
+            String featQ = "SELECT * FROM MenuFeatures WHERE menu_id = " + menu_id;
+            PersistenceManager.executeQuery(featQ, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.featuresMap.put(rs.getString("name"), rs.getBoolean("value"));
+                }
+            });
+
+            // load sections
+            menu.updateSections(Section.loadSectionsFor(menu_id));
+
+            // load free items
+            menu.updateFreeItems(MenuItem.loadItemsFor(menu_id, 0));
+
+            // find if "in use"
+            String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + menu_id + " OR proposed_menu_id = " + menu_id;
+            PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.inUse = true;
+                }
+            });
+
+            menu.owner = User.loadUserById(menu_id);
+
+        } else {
+            menu = new Menu();
+            String query = "SELECT * FROM Menus WHERE id = " + menu_id;
+            PersistenceManager.executeQuery(query, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.id = rs.getInt("id");
+                    menu.title = rs.getString("title");
+                    menu.published = rs.getBoolean("published");
+                }
+            });
+
+            // load features
+            String featQ = "SELECT * FROM MenuFeatures WHERE menu_id = " + menu_id;
+            PersistenceManager.executeQuery(featQ, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.featuresMap.put(rs.getString("name"), rs.getBoolean("value"));
+                }
+            });
+
+            // load sections
+            menu.sections = Section.loadSectionsFor(menu_id);
+
+            // load free items
+            menu.freeItems = MenuItem.loadItemsFor(menu_id, 0);
+
+            // find if "in use"
+            String inuseQ = "SELECT * FROM Services WHERE approved_menu_id = " + menu_id + " OR proposed_menu_id = " + menu_id;
+            PersistenceManager.executeQuery(inuseQ, new ResultHandler() {
+                @Override
+                public void handle(ResultSet rs) throws SQLException {
+                    menu.inUse = true;
+                }
+            });
+
+            menu.owner = User.loadUserById(menu_id);
+
+            loadedMenus.put(menu.id, menu);
+        }
+        return menu;
+    }
+
+
     public boolean getFeatureValue(String feature) {
         return this.featuresMap.get(feature);
     }

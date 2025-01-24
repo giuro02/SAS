@@ -54,7 +54,7 @@ public class EventInfo implements EventItemInfo {
         });
 
         for (EventInfo e : all) {
-            e.services = ServiceInfo.loadServiceInfoForEvent(e.id);
+            e.services = (ObservableList<ServiceInfo>) ServiceInfo.loadServiceInfoForEvent(e.id);
         }
         return all;
     }

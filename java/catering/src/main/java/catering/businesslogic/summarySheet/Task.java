@@ -66,12 +66,10 @@ public class Task {
         return job;
     }
 
-    /*public Shift getShift() { //uso questo se sopra dichiaro shift come Shift e non KitchenShift
-        return shift;
-    }*/
     public KitchenShift getShift() {
         return shift;
     }
+
     public User getCook() {
         return cook;
     }
@@ -96,7 +94,7 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/  Shift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
+    public void assignShift(/*DTOShiftAssignment*/  KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
         /*if(this.getCook()!=null)
             this.setCook(this.getCook());*/
 
@@ -118,10 +116,10 @@ public class Task {
         if(this.getReadyPortions()!=null)
             this.setReadyPortions(this.getReadyPortions());*/
     }
-//Se qua metto Shift invece di KitcehnShift mi da mille errori perchè Shift non ha il metodo getTaskIndex e se glielo creo non riesce a prendere la taskList perchè
-    public boolean removeShift(KitchenShift shift, Task task ) /*int pos*/{//glielo metto dentro se teniamo che un task può avere più shifts
+//ha senso passargli task? io sono int task, basta dirli this no?
+    public boolean removeShift(KitchenShift shift) /*int pos*/{//glielo metto dentro se teniamo che un task può avere più shifts
         boolean ret = false;
-        int pos = shift.getTaskIndex(task);
+        int pos = shift.getTaskIndex(this);
 
         if (shift != null) {
             ret = this.shift.removeTask(this);

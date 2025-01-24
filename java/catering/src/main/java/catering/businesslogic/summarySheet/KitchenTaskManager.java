@@ -134,7 +134,7 @@ public class KitchenTaskManager{
         //CHE STIAMO RIMUOVENDO NON SIA L'ULTIMO DEL TURNO (UN TURNO SENZA TASK NON CREDO ABBIA SENSO DI
         //ESISTERE)
         //if(shift.getTasksList().size()  )
-        task.removeShift(shift, task); //glielo metto dentro se teniamo che un task può avere più shifts
+        task.removeShift(shift); //glielo metto dentro se teniamo che un task può avere più shifts
 
         this.notifyTaskAssignmentDeleted(task, shift);
     }
@@ -171,7 +171,7 @@ public class KitchenTaskManager{
 
     private void notifyTaskInfoModified(Task task) {
         for (KitchenTaskEventReceiver er : this.eventReceivers) {
-            er.updateRegenerateSheet(this.currentSheet);
+            er.updateTaskInfoModified(task);
         }
     }
 

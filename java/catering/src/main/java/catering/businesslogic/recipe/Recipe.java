@@ -18,6 +18,7 @@ public class Recipe {
     private Recipe() {
 
     }
+    private static Map<Integer, Recipe> allRecipes = new HashMap<>();
 
     public Recipe(String name) {
         id = 0;
@@ -83,5 +84,13 @@ public class Recipe {
         return rec;
     }
 
-
+    public static Recipe getRecipe(int id, String name) {
+        if (allRecipes.containsKey(id)) return allRecipes.get(id);
+        Recipe rec = new Recipe();
+        rec.id = id;
+        rec.name = name;
+        //rec.preparations = Preparation.loadPreparationFor(id);
+        allRecipes.put(rec.id, rec);
+        return rec;
+    }
 }

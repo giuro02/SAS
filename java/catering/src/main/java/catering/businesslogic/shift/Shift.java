@@ -7,27 +7,6 @@ import java.util.Date;
 
 public class Shift {
     private int id;
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
     private Date startTime;
     private Date endTime;
     private Date deadline;
@@ -38,11 +17,19 @@ public class Shift {
         this.deadline = deadline;
     }
 
-    public Shift(Date startTime, Date endTime, Date deadline, int id) {
+    public Shift(Date startTime, Date endTime, Date deadline, int id) { //NON CAPIRO' MAI PERCHE' CI SONO DUE COSTRUTTORI
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.deadline = deadline;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Date getstartTime() {
@@ -51,10 +38,6 @@ public class Shift {
 
     public Date getendTime() {
         return endTime;
-    }
-
-    public Date getDeadline() {
-        return deadline;
     }
 
     public void setstartTime(Date startTime) {
@@ -69,17 +52,18 @@ public class Shift {
         this.deadline = deadline;
     }
 
+    public Date getDeadline() {
+        return deadline;
+    }
+
     public long getShiftLength(){
         return (this.endTime.getTime()-this.startTime.getTime())/60000;
     }
 
-    public int getId() {
-        return id;
-    }
 
     //per recuperare taskList da shift direttamente
     // Metodo per accedere a shiftList tramite cast
-    public ArrayList<Task> getTasksList() {
+    public ArrayList<Task> getTasksList() { //HA SENSO METTERLA QUA? A STO POINT METTIAMOLA SOLO IN KITCHENSHIFT
         if (this instanceof KitchenShift) {
             return ((KitchenShift) this).getTaskList();
         }
@@ -92,13 +76,13 @@ public class Shift {
         return id + " - Inizio turno: " + this.startTime + " Fine turno: "+this.endTime+" - Deadline disponibilità: "+this.deadline;
     }
 
-    public void addTask(Task task) {
+    /*public void addTask(Task task) { //A STO POINT SOLO IN KITCHENSHIFT
         if (task != null) {
             getTasksList().add(task);
             System.out.println("Task aggiunto con successo: " );
         } else {
             System.out.println("Errore: il task non può essere null.");
         }
-    }
+    }*/
 
 }
