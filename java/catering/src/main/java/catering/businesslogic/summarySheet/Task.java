@@ -22,8 +22,16 @@ public class Task {
     private KitchenJob job;
     private User cook;
     private KitchenShift shift;
-    //noi forse dobbiamo anche collegarlo a FloorJob???
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setJob(KitchenJob job) {
+        this.job = job;
+    }
+
+    //noi forse dobbiamo anche collegarlo a FloorJob?? ---> NO, solo parte di cucina (?)
     private Task() {
 
     }
@@ -54,14 +62,16 @@ public class Task {
         return readyPortions;
     }
 
-    public Shift getShift() {
-        return shift;
-    }
-
     public KitchenJob getJob() {
         return job;
     }
 
+    /*public Shift getShift() {
+        return shift;
+    }*/
+    public KitchenShift getShift() {
+        return shift;
+    }
     public User getCook() {
         return cook;
     }
@@ -86,27 +96,27 @@ public class Task {
         this.shift= shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/ KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo
-        if(shift.getCook()!=null)
-            this.setCook(shift.getCook());
+    public void assignShift(/*DTOShiftAssignment*/  KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo
+        if(this.getCook()!=null)
+            this.setCook(this.getCook());
 
-        if(shift.getShift()!=null) {
+        if(this.getShift()!=null) {
 
             if(this.shift!=null)
                 this.shift.removeTask(this);
 
-            shift.getShift().addTask(this);
-            this.setShift(shift.getShift());
+            this.getShift().addTask(this);
+            this.setShift( this.getShift() );
         }
 
-        if(shift.getEstimatedTime()!=null)
-            this.setEstimatedTime(shift.getEstimatedTime());
+        if(this.getEstimatedTime()!=null)
+            this.setEstimatedTime(this.getEstimatedTime());
 
-        if(shift.getPortions()!=null)
-            this.setPortions(shift.getPortions());
+        if(this.getPortions()!=null)
+            this.setPortions(this.getPortions());
 
-        if(shift.getReadyPortions()!=null)
-            this.setReadyPortions(shift.getReadyPortions());
+        if(this.getReadyPortions()!=null)
+            this.setReadyPortions(this.getReadyPortions());
     }
 
     public boolean removeShift(KitchenShift shift, Task task ) /*int pos*/{//glielo metto dentro se teniamo che un task può avere più shifts

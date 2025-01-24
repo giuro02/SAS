@@ -97,6 +97,8 @@ public class KitchenTaskManager{
         return this.currentSheet.getService().getKitchenShifts(); //come ha fatto ste, passando da service, tanto penso che
     }
 
+
+
     public void assignTask(Task task, KitchenShift shift) throws UseCaseLogicException, SheetException {
 //assegno il task (che è un compito di cucina) al kitchenShift
         if(this.currentSheet==null)

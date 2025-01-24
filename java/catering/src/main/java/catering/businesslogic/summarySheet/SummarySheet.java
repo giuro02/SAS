@@ -39,7 +39,7 @@ public class SummarySheet {
 
         for (MenuItem mi : menu.getFreeItems()) {
             Recipe recipe = mi.getItemRecipe();
-            Task task = new Task(recipe); //perchè è rosso?? io devo creare un task mettendogli dentro le recipe
+            Task task = new Task((KitchenJob)recipe); //perchè è rosso?? io devo creare un task mettendogli dentro le recipe
             taskList.add(task);
             /*for (KitchenJob kj : recipe.getPreparations()) {
                 Task task2 = new Task(kj);
@@ -50,7 +50,7 @@ public class SummarySheet {
         for (Section s : menu.getSections()) {
             for (MenuItem mi : s.getItems()) {
                 Recipe recipe = mi.getItemRecipe();
-                Task task = new Task(recipe); //anche qua stesso quesito di sopra
+                Task task = new Task((KitchenJob) recipe); //anche qua stesso quesito di sopra -- mi è ignoto, ho cercato di capirlo ma poi dovevo scendere dal trwno
                 taskList.add(task);
                 /*for (KitchenJob kj : recipe.getPreparations()) {
                     Task task2 = new Task(kj);
@@ -113,7 +113,7 @@ public class SummarySheet {
     public int removeTask(Task task, KitchenShift shift) {
          //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
-        task.removeShift(shift, ret);
+        task.removeShift(shift, task);  
         taskList.remove(task);
         return ret;
     }
