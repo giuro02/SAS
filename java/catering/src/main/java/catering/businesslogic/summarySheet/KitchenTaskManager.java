@@ -9,6 +9,18 @@ import catering.businesslogic.event.ServiceInfo;
 import java.util.ArrayList;
 
 public class KitchenTaskManager{
+    public void setCurrentSheet(SummarySheet currentSheet) {
+        this.currentSheet = currentSheet;
+    }
+
+    public ArrayList<KitchenTaskEventReceiver> getEventReceivers() {
+        return eventReceivers;
+    }
+
+    public void setEventReceivers(ArrayList<KitchenTaskEventReceiver> eventReceivers) {
+        this.eventReceivers = eventReceivers;
+    }
+
     private SummarySheet currentSheet;
     private ArrayList<KitchenTaskEventReceiver> eventReceivers;
 
@@ -30,6 +42,7 @@ public class KitchenTaskManager{
 
     public SummarySheet createNewSheet(ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
+        System.out.println("utenteeeeeeeee"+ user.toString());
         if(!user.isChef()||!user.equals(service.getHandler()))
             throw new UseCaseLogicException();
 

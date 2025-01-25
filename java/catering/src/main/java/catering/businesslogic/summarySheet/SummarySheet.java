@@ -36,10 +36,11 @@ public class SummarySheet {
         this.taskList = new ArrayList<>();
 
         Menu menu = service.getMenu();
+        System.out.println("MENUUUU" + menu.testString());
 
         for (MenuItem mi : menu.getFreeItems()) {
             Recipe recipe = mi.getItemRecipe();
-            Task task = new Task((KitchenJob)recipe); //perchè è rosso?? io devo creare un task mettendogli dentro le recipe
+            Task task = new Task( (KitchenJob)recipe); //perchè è rosso?? io devo creare un task mettendogli dentro le recipe
             taskList.add(task);
             /*for (KitchenJob kj : recipe.getPreparations()) {
                 Task task2 = new Task(kj);

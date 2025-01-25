@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Recipe {
+public class Recipe implements KitchenJob {
     private static Map<Integer, Recipe> all = new HashMap<>();
 
     private int id;
@@ -27,6 +27,16 @@ public class Recipe {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setId(int id) {
+
+    }
+
+    @Override
+    public void setName(String name) {
+
     }
 
     public int getId() {

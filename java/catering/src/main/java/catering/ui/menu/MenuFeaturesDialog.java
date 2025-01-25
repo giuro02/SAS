@@ -57,7 +57,7 @@ public class MenuFeaturesDialog {
 
 
     public void initialize() {
-        ObservableMap<String, Boolean> features = CatERing.getInstance().getMenuManager().getCurrentMenu().getFeatures();
+        ObservableMap<String, Boolean> features = (ObservableMap<String, Boolean>) CatERing.getInstance().getMenuManager().getCurrentMenu().getFeatures();
 
         // Creo un table model a partire dalla mappa di features
         ArrayList<String> fnames = new ArrayList<>();

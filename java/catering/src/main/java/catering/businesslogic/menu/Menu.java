@@ -289,9 +289,11 @@ public class Menu {
 
     public void updateFreeItems(ObservableList<MenuItem> newItems) {
         ObservableList<MenuItem> updatedList = FXCollections.observableArrayList();
+
         for (int i = 0; i < newItems.size(); i++) {
             MenuItem mi = newItems.get(i);
-            MenuItem prev = this.findItemById(mi.getId());
+            //MenuItem prev = this.findItemById(mi.getId());
+            MenuItem prev = null;
             if (prev == null) {
                 updatedList.add(mi);
             } else {

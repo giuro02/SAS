@@ -50,7 +50,7 @@ import javafx.stage.Stage;
 public class CatERingApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/main.fxml"));
         Parent root = loader.load();
 
         Scene scene = new Scene(root);
