@@ -95,7 +95,7 @@ public class Task {
         this.shift = shift;
     }
 
-    public void assignShift(/*DTOShiftAssignment*/  KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
+    public void assignShift( KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
         /*if(this.getCook()!=null)
             this.setCook(this.getCook());*/
 
@@ -107,15 +107,6 @@ public class Task {
             this.getShift().addTask(this);
             this.setShift(this.getShift());
         }
-
-        /*if(this.getEstimatedTime()!=null)
-            this.setEstimatedTime(this.getEstimatedTime());
-
-        if(this.getPortions()!=null)
-            this.setPortions(this.getPortions());
-
-        if(this.getReadyPortions()!=null)
-            this.setReadyPortions(this.getReadyPortions());*/
     }
 
     public void modifyTaskInfo(User cook, Integer estimatedTime, String portions, String preparedPortions ) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
@@ -132,18 +123,18 @@ public class Task {
             this.setReadyPortions(this.getReadyPortions());
     }
 
-    //ha senso passargli task? io sono int task, basta dirli this no?
-    public boolean removeShift(KitchenShift shift) { /*int pos*/
-        {//glielo metto dentro se teniamo che un task può avere più shifts
+    public boolean removeShift(KitchenShift shift) {
+        {
             boolean ret = false;
             int pos = shift.getTaskIndex(this);
 
             if (shift != null) {
                 ret = this.shift.removeTask(this);
 
-
-                for (; pos < shift.getTaskList().size(); pos++) {  //per tutti i task dalla posizione di quello cancellato in poi
-                    shift.getTasksList().set(pos - 1, shift.getTasksList().get(pos)); //aggiorno posizioni task dello shift corrente dopo la rimozione di uno di essi
+                //per tutti i task dalla posizione di quello cancellato in poi
+                for (; pos < shift.getTaskList().size(); pos++) {
+                    //aggiornamento posizioni task
+                    shift.getTaskList().set(pos - 1, shift.getTaskList().get(pos));
                 }
 
             }
@@ -153,80 +144,80 @@ public class Task {
 
 
 
-        @Override
-        public String toString () {
-            return "lavoro in cucina: " + job +
-                    (shift != null ? "\n\tturno: " + shift : "") +
-                    (cook != null ? "\n\tcuoco: " + cook : "") +
-                    (estimatedTime != -1 ? "\n\ttempo stimato: " + estimatedTime : "") +
-                    (portions != null ? "\n\tporzioni: " + portions : "") +
-                    (readyPortions != null ? "\n\tporzioni già pronte: " + readyPortions : "") + "\n";
-        }
-
-        // STATIC METHODS FOR PERSISTENCE
-
-        public static void saveAllNewTasks ( int sheetId, List<Task > tasks,int pos){
-            String taskInsert = "INSERT INTO catering.Tasks (sheet_id, job_id, position) VALUES (?, ?, ?);";
-            PersistenceManager.executeBatchUpdate(taskInsert, tasks.size(), new BatchUpdateHandler() {
-                @Override
-                public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
-                    ps.setInt(1, sheetId);
-                    ps.setInt(2, tasks.get(batchCount).job.getId());
-                    ps.setInt(3, pos + batchCount);
-                }
-
-                @Override
-                public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
-                    tasks.get(count).id = rs.getInt(1);
-                }
-            });
-        }
-
-        public static void deleteTask ( int sheetId, Task task,int pos){
-            String taskDelete = "DELETE FROM Tasks WHERE id = " + task.id;
-            PersistenceManager.executeUpdate(taskDelete);
-
-            String updateSuccTasks = "UPDATE Tasks SET position = (position - 1) WHERE sheet_id = " +
-                    sheetId +
-                    " AND position > " +
-                    pos + ";";
-            PersistenceManager.executeUpdate(updateSuccTasks);
-        }
-
-        public static void updateTask (Task task){
-            String taskUpdate = "UPDATE Tasks SET shift_id = " + task.shift.getId() +
-                    ", cook_id = " + task.cook.getId() +
-                    ", portions = '" + task.portions +
-                    "', ready_portions = '" + task.readyPortions +
-                    "', estimated_time = " + task.estimatedTime +
-                    " WHERE id = " + task.id;
-            PersistenceManager.executeUpdate(taskUpdate);
-        }
-
-        public static void deleteAssignment ( int id){
-            String assignmentDelete = "UPDATE Tasks SET shift_id = NULL WHERE id = " + id;
-            PersistenceManager.executeUpdate(assignmentDelete);
-        }
-
-        public static ArrayList<Task> loadTaskFor ( int shift_id){
-            ArrayList<Task> result = new ArrayList<>();
-            String query = "SELECT * FROM Tasks WHERE shift_id = " + shift_id + "";
-            PersistenceManager.executeQuery(query, new ResultHandler() {
-                @Override
-                public void handle(ResultSet rs) throws SQLException {
-                    Task task = new Task();
-                    task.id = rs.getInt("id");
-                    task.estimatedTime = rs.getInt("estimated_time");
-                    task.portions = rs.getString("portions");
-                    task.readyPortions = rs.getString("ready_portions");
-                    int job_id = rs.getInt("job_id");
-                    task.job = KitchenJob.loadKitchenJobById(job_id);
-                    int cook_id = rs.getInt("cook_id");
-                    task.cook = User.loadUserById(cook_id);
-                    task.shift = null;
-                    result.add(task);
-                }
-            });
-            return result;
-        }
+    @Override
+    public String toString () {
+        return "lavoro in cucina: " + job +
+                (shift != null ? "\n\tturno: " + shift : "") +
+                (cook != null ? "\n\tcuoco: " + cook : "") +
+                (estimatedTime != -1 ? "\n\ttempo stimato: " + estimatedTime : "") +
+                (portions != null ? "\n\tporzioni: " + portions : "") +
+                (readyPortions != null ? "\n\tporzioni già pronte: " + readyPortions : "") + "\n";
     }
+
+    // STATIC METHODS FOR PERSISTENCE
+
+    public static void saveAllNewTasks ( int sheetId, List<Task > tasks,int pos){
+        String taskInsert = "INSERT INTO catering.Tasks (sheet_id, job_id, position) VALUES (?, ?, ?);";
+        PersistenceManager.executeBatchUpdate(taskInsert, tasks.size(), new BatchUpdateHandler() {
+            @Override
+            public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                ps.setInt(1, sheetId);
+                ps.setInt(2, tasks.get(batchCount).job.getId());
+                ps.setInt(3, pos + batchCount);
+            }
+
+            @Override
+            public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                tasks.get(count).id = rs.getInt(1);
+            }
+        });
+    }
+
+    public static void deleteTask ( int sheetId, Task task,int pos){
+        String taskDelete = "DELETE FROM Tasks WHERE id = " + task.id;
+        PersistenceManager.executeUpdate(taskDelete);
+
+        String updateSuccTasks = "UPDATE Tasks SET position = (position - 1) WHERE sheet_id = " +
+                sheetId +
+                " AND position > " +
+                pos + ";";
+        PersistenceManager.executeUpdate(updateSuccTasks);
+    }
+
+    public static void updateTask (Task task){
+        String taskUpdate = "UPDATE Tasks SET shift_id = " + task.shift.getId() +
+                ", cook_id = " + task.cook.getId() +
+                ", portions = '" + task.portions +
+                "', ready_portions = '" + task.readyPortions +
+                "', estimated_time = " + task.estimatedTime +
+                " WHERE id = " + task.id;
+        PersistenceManager.executeUpdate(taskUpdate);
+    }
+
+    public static void deleteAssignment ( int id){
+        String assignmentDelete = "UPDATE Tasks SET shift_id = NULL WHERE id = " + id;
+        PersistenceManager.executeUpdate(assignmentDelete);
+    }
+
+    public static ArrayList<Task> loadTaskFor ( int shift_id){
+        ArrayList<Task> result = new ArrayList<>();
+        String query = "SELECT * FROM Tasks WHERE shift_id = " + shift_id + "";
+        PersistenceManager.executeQuery(query, new ResultHandler() {
+            @Override
+            public void handle(ResultSet rs) throws SQLException {
+                Task task = new Task();
+                task.id = rs.getInt("id");
+                task.estimatedTime = rs.getInt("estimated_time");
+                task.portions = rs.getString("portions");
+                task.readyPortions = rs.getString("ready_portions");
+                int job_id = rs.getInt("job_id");
+                task.job = KitchenJob.loadKitchenJobById(job_id);
+                int cook_id = rs.getInt("cook_id");
+                task.cook = User.loadUserById(cook_id);
+                task.shift = null;
+                result.add(task);
+            }
+        });
+        return result;
+    }
+}

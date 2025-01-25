@@ -71,9 +71,9 @@ public class KitchenTaskManager{
         int pos = currentSheet.removeTask(task, shift);
 
         int i = 0;
-        for(i=pos; i < task.getShift().getTasksList().size(); i++) {
+        for(i=pos; i < task.getShift().getTaskList().size(); i++) {
             //aggiorno le posizioni indietro di uno -- passando sulla lista dei task dal turno associato al task
-            currentSheet.setTask(task.getShift().getTasksList().get(i), i-1);
+            currentSheet.setTask(task.getShift().getTaskList().get(i), i-1);
         }
 
         this.notifyTaskDeleted(currentSheet, task, pos);

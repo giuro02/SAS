@@ -36,6 +36,7 @@ public class EventInfo implements EventItemInfo {
     // STATIC METHODS FOR PERSISTENCE
 
     public static ObservableList<EventInfo> loadAllEventInfo() {
+
         ObservableList<EventInfo> all = FXCollections.observableArrayList();
         String query = "SELECT * FROM Events WHERE true";
         PersistenceManager.executeQuery(query, new ResultHandler() {

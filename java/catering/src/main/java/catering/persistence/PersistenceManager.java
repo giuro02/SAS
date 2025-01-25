@@ -7,8 +7,8 @@ import java.sql.*;
 public class PersistenceManager {
     private static String url = "jdbc:mysql://localhost:3306/catering?serverTimezone=UTC";
     //private static String url = "jdbc:mysql://localhost:3306/catering";
-    private static String username = "root";
-    private static String password = "Giuliarostagno2002!";
+    private static String username = "admin";
+    private static String password = "Elettrasia2510!";
 
     private static int lastId;
 

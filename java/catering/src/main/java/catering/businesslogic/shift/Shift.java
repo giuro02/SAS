@@ -63,12 +63,12 @@ public class Shift {
 
     //per recuperare taskList da shift direttamente
     // Metodo per accedere a shiftList tramite cast
-    public ArrayList<Task> getTasksList() { //HA SENSO METTERLA QUA? A STO POINT METTIAMOLA SOLO IN KITCHENSHIFT
+    /*public ArrayList<Task> getTasksList() { //HA SENSO METTERLA QUA? A STO POINT METTIAMOLA SOLO IN KITCHENSHIFT
         if (this instanceof KitchenShift) {
             return ((KitchenShift) this).getTaskList();
         }
         throw new UnsupportedOperationException("ShiftList non disponibile per questa classe.");
-    }
+    }*/
 
 
     @Override
