@@ -113,13 +113,14 @@ public class KitchenTaskManager{
         this.notifyTaskAssigned(task, shift);
     }
 
-    //TODO da finire
     public void modifyInfoTaskAssignment(Task task, User cook, Integer estimatedTime, String portions, String preparedPortions) throws UseCaseLogicException, SheetException {
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
+
+        task.modifyTaskInfo(cook, estimatedTime, portions, preparedPortions);
 
         this.notifyTaskInfoModified(task);
     }

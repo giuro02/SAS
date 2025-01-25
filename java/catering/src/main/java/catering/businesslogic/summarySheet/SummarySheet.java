@@ -113,7 +113,7 @@ public class SummarySheet {
     public int removeTask(Task task, KitchenShift shift) { //solo Shift?
          //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
-        task.removeShift(shift, task);  
+        task.removeShift(shift);
         taskList.remove(task);
         return ret;
     }
