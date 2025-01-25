@@ -79,7 +79,7 @@ public class KitchenTaskManager{
         this.notifyTaskDeleted(currentSheet, task, pos);
     }
 
-    public SummarySheet orderTask(Task task, int pos) throws UseCaseLogicException{ //TODO come ordiniamo?
+    public SummarySheet orderTask(Task task, int pos) throws UseCaseLogicException{
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
@@ -89,7 +89,7 @@ public class KitchenTaskManager{
 
         return this.currentSheet;
     }
-
+//forse il nome deve essere cambiato in getShifts non shiftBoard che non la tocchiamo
     public ArrayList<KitchenShift> getShiftBoard() throws UseCaseLogicException{//TODO come recuperiamo shiftboard
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
