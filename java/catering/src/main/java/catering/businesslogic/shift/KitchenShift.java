@@ -1,27 +1,33 @@
 package catering.businesslogic.shift;
 
+import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.summarySheet.Task;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
-import java.util.Date;
+import java.security.Provider;
+import java.time.LocalDateTime;
+import java.time.Duration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class KitchenShift extends Shift {
 
     private String place;
+
     private ArrayList<Task> taskList;
 
-    public KitchenShift(Date startTime, Date endTime, Date deadline, ArrayList<Task> taskList, String place) {
-        super(startTime, endTime, deadline);
-        this.taskList = taskList;
+    public KitchenShift(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime deadline, String place, ArrayList<Task> taskList, ServiceInfo service ) {
+        super(startTime, endTime, deadline,service);
         this.place= place;
-        taskList = new ArrayList<>();
+        this.taskList = taskList == null ? new ArrayList<>() : taskList;
+        this.setService(service) ;
+        service.addShift(this);
     }
 
-    public KitchenShift(Date startTime, Date endTime, Date deadline, String place, int id) {
+    public KitchenShift(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime deadline, String place, int id) {
         super(startTime, endTime, deadline, id);
         this.place= place;
         taskList = new ArrayList<>();
@@ -59,8 +65,7 @@ public class KitchenShift extends Shift {
                 estimatedTime+=t.getEstimatedTime();
         }
 
-        long difference = (this.getendTime().getTime() - this.getstartTime().getTime())/60000;
-
+        long difference = Duration.between (this.getStartTime(),this.getEndTime()).toMinutes();
         return difference >= estimatedTime;
     }
 
@@ -81,8 +86,9 @@ public class KitchenShift extends Shift {
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {
-                KitchenShift shift = new KitchenShift(rs.getTimestamp("start_date"), rs.getTimestamp("end_date"), rs.getTimestamp("deadline"), rs.getString("place"), rs.getInt("id"));
+                KitchenShift shift = new KitchenShift(rs.getObject("start_time", LocalDateTime.class), rs.getObject("end_time", LocalDateTime.class), rs.getObject("deadline", LocalDateTime.class), rs.getString("place"), null, null);
                 shift.taskList = Task.loadTaskFor(shift.getId());
+                shift.setService(ServiceInfo.loadServiceById(rs.getInt("service_id")));
                 result.add(shift);
             }
         });

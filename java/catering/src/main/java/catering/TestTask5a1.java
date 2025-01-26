@@ -1,5 +1,6 @@
 package catering;
 
+
 import catering.businesslogic.CatERing;
 import catering.businesslogic.UseCaseLogicException;
 import catering.businesslogic.event.EventInfo;
@@ -25,7 +26,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 
-public class TestTask{
+public class TestTask5a1{
     public static void main(String[] args) {
         try {
             /* System.out.println("TEST DATABASE CONNECTION");
@@ -52,65 +53,22 @@ public class TestTask{
             System.out.println(t2.toString());
             System.out.println(s.testString());
 
-            System.out.println("\nTEST ORDER TASK");
-            CatERing.getInstance().getKitchenTaskManager().orderTask(t1, 1);
-            System.out.println(s.testString());
-
+            //assign
             System.out.println("\nTEST ASSIGN TASK");
             KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 12, 17, 0, 0), LocalDateTime.of(2025, 1, 12, 20,0,0) ,null, "Torino", null, service );
             //KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 12, 17, 0, 0), LocalDateTime.of(2025, 1, 12, 20,0,0) ,null, "Torino", null, service );
             //KitchenShift ks = new KitchenShift(null, null, null, "Torino", null, service );
             CatERing.getInstance().getKitchenTaskManager().assignTask(t1, ks);
-            System.out.println(ks);
-
-            System.out.println("\nTEST GET SHIFTS");
-            ArrayList<KitchenShift> shifts = service.getKitchenShifts();
-            for(KitchenShift shift: shifts)
-                System.out.println(shift);
-
-/*
-            System.out.println("\nTEST GET EVENT INFO");
-            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();
-            for (EventInfo e: events) {
-                System.out.println(e);
-                for (ServiceInfo s: e.getServices()) {
-                    System.out.println("\t" + s);
-                }
-            }
-            System.out.println("");
-
-            System.out.println("\nTEST GET RECIPES AND INSERT ITEM IN SECTION");
-            ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(0), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(1), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(2), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(6), secondi);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(7), secondi);
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST INSERT FREE ITEM");
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(3));
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(4));
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST EDIT FEATURES");
-            Map<String, Boolean> f = CatERing.getInstance().getMenuManager().getCurrentMenu().getFeatures();
-            String[] fNames = f.keySet().toArray(new String[0]);
-            boolean[] vals = new boolean[fNames.length];
-            Arrays.fill(vals, true);
-            CatERing.getInstance().getMenuManager().setAdditionalFeatures(fNames, vals);
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST EDIT TITLE");
-            CatERing.getInstance().getMenuManager().changeTitle("Titolo Nuovo");
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST PUBLISH");
-            CatERing.getInstance().getMenuManager().publish();
-            System.out.println(m.testString());*/
+            CatERing.getInstance().getKitchenTaskManager().assignTask(t2, ks);
+            System.out.println("Kitchen Shift:\n" + ks.getTaskList().toString());
+            System.out.println("\nTEST REMOVE ASSIGN TASK");
+            //remove_assign
+            CatERing.getInstance().getKitchenTaskManager().deleteAssignment(t1,ks);
+            System.out.println("Kitchen Shift:\n" + ks.getTaskList().toString());
 
         } catch (UseCaseLogicException | SheetException e) {
             System.out.println("Errore di logica nello use case");
         }
     }
 }
+

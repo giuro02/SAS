@@ -7,11 +7,14 @@ import catering.persistence.BatchUpdateHandler;
 import catering.persistence.PersistenceManager;
 import catering.persistence.ResultHandler;
 
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class Task {
 
@@ -39,8 +42,8 @@ public class Task {
     public Task(KitchenJob kj) {
         this.id = 0;
         this.job = kj;
-        this.readyPortions = null;
-        this.portions = null;
+        this.readyPortions = "";
+        this.portions = "";
         this.cook = null;
         this.estimatedTime = -1;
         this.shift = null;
@@ -95,18 +98,15 @@ public class Task {
         this.shift = shift;
     }
 
-    public void assignShift( KitchenShift shift) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
+    public void assignShift( KitchenShift shift) {
         /*if(this.getCook()!=null)
             this.setCook(this.getCook());*/
 
-        if (this.getShift() != null) {
-
-            if (this.shift != null)
-                this.shift.removeTask(this);
-
-            this.getShift().addTask(this);
-            this.setShift(this.getShift());
+        if (this.shift  != null) {
+            this.shift.removeTask(this);
         }
+        this.shift = shift;
+        this.shift.addTask(this);
     }
 
     public void modifyTaskInfo(User cook, Integer estimatedTime, String portions, String preparedPortions ) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
@@ -114,13 +114,13 @@ public class Task {
             this.setCook(this.getCook());
 
         if(this.getEstimatedTime()!=null)
-            this.setEstimatedTime(this.getEstimatedTime());
+            this.setEstimatedTime(estimatedTime);
 
         if(this.getPortions()!=null)
-            this.setPortions(this.getPortions());
+            this.setPortions(portions);
 
         if(this.getReadyPortions()!=null)
-            this.setReadyPortions(this.getReadyPortions());
+            this.setReadyPortions(preparedPortions);
     }
 
     public boolean removeShift(KitchenShift shift) {
@@ -132,10 +132,10 @@ public class Task {
                 ret = this.shift.removeTask(this);
 
                 //per tutti i task dalla posizione di quello cancellato in poi
-                for (; pos < shift.getTaskList().size(); pos++) {
+                /*for (; pos < shift.getTaskList().size(); pos++) {
                     //aggiornamento posizioni task
                     shift.getTaskList().set(pos - 1, shift.getTaskList().get(pos));
-                }
+                }*/
 
             }
             return ret;
@@ -182,26 +182,56 @@ public class Task {
                 " AND position > " +
                 pos + ";";
         PersistenceManager.executeUpdate(updateSuccTasks);
+        String delete = "DELETE FROM TasksInShift WHERE task_id = "+task.id;
+        PersistenceManager.executeUpdate(delete);
     }
 
-    public static void updateTask (Task task){
-        String taskUpdate = "UPDATE Tasks SET shift_id = " + task.shift.getId() +
-                ", cook_id = " + task.cook.getId() +
+    public static void updateTask (Task task) {
+        if (task.shift != null){
+            String shiftUpdate = "INSERT IGNORE INTO Shifts (service_id, start_time, end_time, deadline,type, place) VALUES (?, ?, ?, ?, ?, ?);";
+            PersistenceManager.executeBatchUpdate(shiftUpdate, 1, new BatchUpdateHandler() {
+                @Override
+                public void handleBatchItem(PreparedStatement ps, int batchCount) throws SQLException {
+                    ps.setInt(1, task.shift.getService().getId());
+                    ps.setObject(2, task.shift.getStartTime() );
+                    ps.setObject(3, task.shift.getEndTime()) ;
+                    ps.setObject(4, task.shift.getDeadline() );
+                    ps.setString(5, task.shift.getType());
+                    ps.setString(6, task.shift.getPlace());
+                }
+
+                @Override
+                public void handleGeneratedIds(ResultSet rs, int count) throws SQLException {
+                    task.shift.setId(rs.getInt(1) );
+
+                }
+            });
+            String taskInShiftUpdate = "INSERT IGNORE INTO catering.TasksInShift (task_id, shift_id) VALUES (" + task.id + "," + task.shift.getId() + ");";
+            PersistenceManager.executeUpdate(taskInShiftUpdate);
+    }
+
+        String taskUpdate = "UPDATE Tasks SET shift_id = " + (task.shift == null ? "NULL" : task.shift.getId()) +
+                ", cook_id = " + (task.cook == null ? "NULL" : task.cook.getId()) +
                 ", portions = '" + task.portions +
                 "', ready_portions = '" + task.readyPortions +
                 "', estimated_time = " + task.estimatedTime +
                 " WHERE id = " + task.id;
         PersistenceManager.executeUpdate(taskUpdate);
+
+
+
     }
 
     public static void deleteAssignment ( int id){
         String assignmentDelete = "UPDATE Tasks SET shift_id = NULL WHERE id = " + id;
         PersistenceManager.executeUpdate(assignmentDelete);
+        String delete = "DELETE FROM TasksInShift WHERE task_id="+id;
+        PersistenceManager.executeUpdate(delete);
     }
 
     public static ArrayList<Task> loadTaskFor ( int shift_id){
         ArrayList<Task> result = new ArrayList<>();
-        String query = "SELECT * FROM Tasks WHERE shift_id = " + shift_id + "";
+        String query = "SELECT * FROM Tasks WHERE shift_id = " + shift_id ;
         PersistenceManager.executeQuery(query, new ResultHandler() {
             @Override
             public void handle(ResultSet rs) throws SQLException {

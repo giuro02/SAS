@@ -42,7 +42,7 @@ public class KitchenTaskManager{
 
     public SummarySheet createNewSheet(ServiceInfo service) throws UseCaseLogicException{
         User user = CatERing.getInstance().getUserManager().getCurrentUser();
-        System.out.println("utenteeeeeeeee"+ user.toString());
+        System.out.println(user.toString());
         if(!user.isChef()||!user.equals(service.getHandler()))
             throw new UseCaseLogicException();
 
@@ -66,33 +66,34 @@ public class KitchenTaskManager{
         return currentSheet;
     }
 
-    public ArrayList<Task> createTask(KitchenJob kj) throws  UseCaseLogicException{
+    public Task createTask(KitchenJob kj) throws  UseCaseLogicException{
 
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
-        ArrayList<Task> createdTasks=this.currentSheet.addTask(kj);
+        Task createdTasks=this.currentSheet.addTask(kj);
 
         this.notifyTaskCreated(createdTasks);
 
         return createdTasks;
     }
 
-    public void deleteTask(Task task, KitchenShift shift) throws UseCaseLogicException {
+    public void deleteTask(Task task) throws UseCaseLogicException {
         if (this.currentSheet == null)
             throw new UseCaseLogicException();
-        int pos = currentSheet.removeTask(task, shift);
+        int pos = currentSheet.removeTask(task);
 
-        int i = 0;
-        for(i=pos; i < task.getShift().getTaskList().size(); i++) {
+        /*int i = 0;
+        for(i=pos; i < currentSheet.getTaskList().size() && i!=-1; i++) {
             //aggiorno le posizioni indietro di uno -- passando sulla lista dei task dal turno associato al task
-            currentSheet.setTask(task.getShift().getTaskList().get(i), i-1);
-        }
+            if(i!=0)
+                currentSheet.setTask(currentSheet.getTaskList().get(i), i-1);
+        }*/
 
         this.notifyTaskDeleted(currentSheet, task, pos);
     }
 
-    public SummarySheet orderTask(Task task, int pos) throws UseCaseLogicException{
+    public void orderTask(Task task, int pos) throws UseCaseLogicException{
         if(this.currentSheet==null)
             throw new UseCaseLogicException();
 
@@ -100,7 +101,7 @@ public class KitchenTaskManager{
 
         this.notifyOrderedTasks(this.currentSheet);
 
-        return this.currentSheet;
+        //return this.currentSheet;
     }
 //forse il nome deve essere cambiato in getShifts non shiftBoard che non la tocchiamo
     public ArrayList<KitchenShift> getShiftBoard() throws UseCaseLogicException{//TODO come recuperiamo shiftboard
@@ -120,7 +121,7 @@ public class KitchenTaskManager{
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
 
-        if(shift.enoughTime(task.getEstimatedTime())) //assegno il task allo shift solo se lo shift ha abbastanza tempo a disposizione
+        if(shift.enoughTime(task.getEstimatedTime() == -1 ? 0 : task.getEstimatedTime() )) //assegno il task allo shift solo se lo shift ha abbastanza tempo a disposizione
             task.assignShift(shift);
 
         this.notifyTaskAssigned(task, shift);
@@ -144,18 +145,16 @@ public class KitchenTaskManager{
 
         if(!this.currentSheet.containsTask(task))
             throw new SheetException();
-        //MA SE NOI NON ABBIAMO SOLO UN TASK PER UN TURNO NON HA SENSO ELIMINARE IL TURNO A MENO CHE IL TASK
-        //CHE STIAMO RIMUOVENDO NON SIA L'ULTIMO DEL TURNO (UN TURNO SENZA TASK NON CREDO ABBIA SENSO DI
-        //ESISTERE)
+
         //if(shift.getTasksList().size()  )
         task.removeShift(shift); //glielo metto dentro se teniamo che un task può avere più shifts
 
         this.notifyTaskAssignmentDeleted(task, shift);
     }
 
-    private void notifyTaskCreated(ArrayList<Task> tasks) {
+    private void notifyTaskCreated(Task task) {
         for (KitchenTaskEventReceiver er : this.eventReceivers) {
-            er.updateTaskCreated(this.currentSheet, tasks);
+            er.updateTaskCreated(this.currentSheet, task);
         }
     }
 
@@ -173,7 +172,8 @@ public class KitchenTaskManager{
 
     private void notifyTaskAssigned(Task task, Shift shift) {
         for (KitchenTaskEventReceiver er : this.eventReceivers) {
-            er.updateTaskAssignment(task, shift);
+            er.updateTaskAssignment(task);
+            //er.updateTaskAssignment(task, shift);
         }
     }
 

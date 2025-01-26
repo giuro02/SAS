@@ -36,7 +36,7 @@ public class SummarySheet {
         this.taskList = new ArrayList<>();
 
         Menu menu = service.getMenu();
-        System.out.println("MENUUUU" + menu.testString());
+
 
         for (MenuItem mi : menu.getFreeItems()) {
             Recipe recipe = mi.getItemRecipe();
@@ -82,22 +82,18 @@ public class SummarySheet {
         return taskList.size();
     }
 
-    public ArrayList<Task> addTask(KitchenJob kj) {
+    public Task addTask(KitchenJob kj) {
         Task t = new Task(kj);
-        ArrayList<Task> newTasks = new ArrayList<Task>();
-        newTasks.add(t);
-        /*if (kj instanceof Recipe) {
-            for (KitchenJob job : ((Recipe)kj).getPreparations()) {
-                t = new Task(job);
-                newTasks.add(t);
-            }
-        }*/
-        taskList.addAll(newTasks);
-        return newTasks;
+
+
+        taskList.add(t);
+        return t;
     }
 
     public void setTask(Task task, int position) {
         int pos = taskList.indexOf(task);
+        //if ( position == -1)
+            //position = 0;
         Task oldTask = taskList.set(position, task); // Sostituisci l'elemento alla posizione desiderata con il task e salva l'elemento sostituito
         taskList.add(position + 1, oldTask); // Inserisci l'elemento sostituito nella posizione successiva
         taskList.remove(position < pos ? pos + 1 : pos); //rimuovi l'elemento duplicato
@@ -111,10 +107,12 @@ public class SummarySheet {
         return owner.equals(user);
     }
 
-    public int removeTask(Task task, KitchenShift shift) { //solo Shift?
+    public int removeTask(Task task) { //solo Shift?
          //glielo metto dentro se teniamo che un task può avere più shifts, è giusto task.getShift()???
         int ret = taskList.indexOf(task);
-        task.removeShift(shift);
+        if (task.getShift() != null) {
+            task.removeShift(task.getShift());
+        }
         taskList.remove(task);
         return ret;
     }

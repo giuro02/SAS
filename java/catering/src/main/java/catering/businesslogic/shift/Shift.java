@@ -1,23 +1,61 @@
 package catering.businesslogic.shift;
 
+import catering.businesslogic.event.ServiceInfo;
 import catering.businesslogic.summarySheet.Task;
 
+//import java.util.Date;
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.Duration;
 
 public class Shift {
     private int id;
-    private Date startTime;
-    private Date endTime;
-    private Date deadline;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private LocalDateTime deadline;
+    private ServiceInfo service;
+    private String type;
 
-    public Shift(Date startTime, Date endTime, Date deadline) {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public ServiceInfo getService() {
+        return service;
+    }
+
+    public void setService(ServiceInfo service) {
+        this.service = service;
+    }
+
+    public Shift(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime deadline, ServiceInfo service) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.deadline = deadline;
+        this.service = service;
     }
 
-    public Shift(Date startTime, Date endTime, Date deadline, int id) { //NON CAPIRO' MAI PERCHE' CI SONO DUE COSTRUTTORI
+    public Shift(LocalDateTime startTime, LocalDateTime endTime, LocalDateTime deadline, int id) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -32,32 +70,32 @@ public class Shift {
         return id;
     }
 
-    public Date getstartTime() {
+    public LocalDateTime getstartTime() {
         return startTime;
     }
 
-    public Date getendTime() {
+    public LocalDateTime getendTime() {
         return endTime;
     }
 
-    public void setstartTime(Date startTime) {
+    public void setstartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setendTime(Date endTime) {
+    public void setendTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
 
-    public Date getDeadline() {
+    public LocalDateTime getDeadline() {
         return deadline;
     }
 
     public long getShiftLength(){
-        return (this.endTime.getTime()-this.startTime.getTime())/60000;
+        return Duration.between(startTime,endTime).toMinutes();                                 //-this.startTime.getTime())/60000;
     }
 
 

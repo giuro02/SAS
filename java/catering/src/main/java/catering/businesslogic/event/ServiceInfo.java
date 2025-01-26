@@ -57,6 +57,10 @@ public class ServiceInfo implements EventItemInfo {
         this.menu = menu;
     }
 
+    public void addShift(KitchenShift s){
+        this.kitchenShiftList.add(s);
+    }
+
     public String toString() {
         return name + ": " + date + " (" + timeStart + "-" + timeEnd + "), " + participants + " pp.";
     }
