@@ -23,7 +23,8 @@ public class Task {
     private String portions;
     private String readyPortions;
     private KitchenJob job;
-    private User cook;
+    //private User cook; è un id
+    private int cook;
     private KitchenShift shift; //fose qua è Shift non kitchenShift
 
     public void setId(int id) {
@@ -44,7 +45,7 @@ public class Task {
         this.job = kj;
         this.readyPortions = "";
         this.portions = "";
-        this.cook = null;
+        this.cook = 0;
         this.estimatedTime = -1;
         this.shift = null;
     }
@@ -73,7 +74,7 @@ public class Task {
         return shift;
     }
 
-    public User getCook() {
+    public int getCook() {
         return cook;
     }
 
@@ -90,7 +91,7 @@ public class Task {
         this.readyPortions = readyPortions;
     }
 
-    public void setCook(User cook) {
+    public void setCook(int cook) {
         this.cook = cook;
     }
 
@@ -109,9 +110,9 @@ public class Task {
         this.shift.addTask(this);
     }
 
-    public void modifyTaskInfo(User cook, Integer estimatedTime, String portions, String preparedPortions ) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
-        if(this.getCook()!=null)
-            this.setCook(this.getCook());
+    public void modifyTaskInfo(int cook, Integer estimatedTime, String portions, String preparedPortions ) { //da capire --E: secondo me basta shift ma verifichiamo --> anche secondo me
+        //if(this.getCook()!=0)
+            this.setCook(cook);
 
         if(this.getEstimatedTime()!=null)
             this.setEstimatedTime(estimatedTime);
@@ -148,7 +149,7 @@ public class Task {
     public String toString () {
         return "lavoro in cucina: " + job +
                 (shift != null ? "\n\tturno: " + shift : "") +
-                (cook != null ? "\n\tcuoco: " + cook : "") +
+                (cook != 0 ? "\n\tcuoco: " + cook : "") +
                 (estimatedTime != -1 ? "\n\ttempo stimato: " + estimatedTime : "") +
                 (portions != null ? "\n\tporzioni: " + portions : "") +
                 (readyPortions != null ? "\n\tporzioni già pronte: " + readyPortions : "") + "\n";
@@ -211,7 +212,7 @@ public class Task {
     }
 
         String taskUpdate = "UPDATE Tasks SET shift_id = " + (task.shift == null ? "NULL" : task.shift.getId()) +
-                ", cook_id = " + (task.cook == null ? "NULL" : task.cook.getId()) +
+                ", cook_id = " + (task.cook == 0 ? "NULL" : task.getCook()) +
                 ", portions = '" + task.portions +
                 "', ready_portions = '" + task.readyPortions +
                 "', estimated_time = " + task.estimatedTime +
@@ -243,7 +244,7 @@ public class Task {
                 int job_id = rs.getInt("job_id");
                 task.job = KitchenJob.loadKitchenJobById(job_id);
                 int cook_id = rs.getInt("cook_id");
-                task.cook = User.loadUserById(cook_id);
+                //task.cook = User.loadUserById(cook_id);
                 task.shift = null;
                 result.add(task);
             }

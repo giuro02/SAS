@@ -46,9 +46,16 @@ public class TestTask5a2{
             KitchenJob kj1 = CatERing.getInstance().getRecipeManager().getRecipes().get(0);
             Task t1 = CatERing.getInstance().getKitchenTaskManager().createTask(kj1);
             System.out.println(t1.toString());
-
+            //cook
+            CatERing.getInstance().getUserManager().fakeLogin("Marinella");
+            System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
+            System.out.println(CatERing.getInstance().getUserManager().getCurrentUser().getId());
+            int cook_id = CatERing.getInstance().getUserManager().getCurrentUser().getId();
             System.out.println("\nTEST MODIFY TASK");
-            CatERing.getInstance().getKitchenTaskManager().modifyInfoTaskAssignment(t1,null,50,"20", "2");
+            CatERing.getInstance().getKitchenTaskManager().modifyInfoTaskAssignment(t1,cook_id,50,"20", "2");
+            KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 10, 17, 0, 0), LocalDateTime.of(2025, 1, 10, 21,0,0) ,null, "Torino", null, service );
+            CatERing.getInstance().getKitchenTaskManager().assignTask(t1, ks);
+            System.out.println("Kitchen Shift:\n" + ks.getTaskList().toString());
             System.out.println("modified task: "+ t1);
 
         } catch (UseCaseLogicException | SheetException e) {
