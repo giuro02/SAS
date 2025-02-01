@@ -29,7 +29,6 @@ public class TestCatERing {
             Section primi = CatERing.getInstance().getMenuManager().defineSection("Primi");
             Section secondi = CatERing.getInstance().getMenuManager().defineSection("Secondi");
             System.out.println(m.testString());
-
             System.out.println("\nTEST GET EVENT INFO");
             ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();
             for (EventInfo e: events) {

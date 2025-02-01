@@ -29,6 +29,14 @@ public class Menu {
 
     private User owner;
 
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     private Menu() {
         this.featuresMap = FXCollections.observableHashMap();
     }

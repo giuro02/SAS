@@ -123,7 +123,11 @@ public class KitchenTaskManager{
 
         if(shift.enoughTime(task.getEstimatedTime() == -1 ? 0 : task.getEstimatedTime() )) //assegno il task allo shift solo se lo shift ha abbastanza tempo a disposizione
             task.assignShift(shift);
-
+        else {
+            //System.out.println("Impossibile assegnare il task" +task + "tempo insufficente");
+            System.out.println("\u001B[31mImpossibile assegnare il task: " + task + " TEMPO INSUFFICENTE\u001B[0m");
+            System.exit(500);
+        }
         this.notifyTaskAssigned(task, shift);
     }
 

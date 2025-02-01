@@ -27,7 +27,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 
-public class TestTask5a2{
+public class TestTimeError{
     public static void main(String[] args) {
         try {
             System.out.println("TEST FAKE LOGIN");
@@ -45,18 +45,23 @@ public class TestTask5a2{
 
             System.out.println("\nTEST ADD TASK");
             KitchenJob kj1 = CatERing.getInstance().getRecipeManager().getRecipes().get(0);
+            KitchenJob kj2 = CatERing.getInstance().getRecipeManager().getRecipes().get(1);
             Task t1 = CatERing.getInstance().getKitchenTaskManager().createTask(kj1);
+            Task t2 = CatERing.getInstance().getKitchenTaskManager().createTask(kj2);
+
             System.out.println(t1.toString());
             //get cook
             CatERing.getInstance().getUserManager().fakeLogin("Marinella");
-            //System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
-            //System.out.println(CatERing.getInstance().getUserManager().getCurrentUser().getId());
             int cook_id = CatERing.getInstance().getUserManager().getCurrentUser().getId();
             System.out.println("\nTEST MODIFY TASK");
             CatERing.getInstance().getKitchenTaskManager().modifyInfoTaskAssignment(t1,cook_id,50,"20", "2");
+            CatERing.getInstance().getKitchenTaskManager().modifyInfoTaskAssignment(t2,cook_id,200000,"20", "2");
             KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 10, 17, 0, 0), LocalDateTime.of(2025, 1, 10, 21,0,0) ,LocalDateTime.of(2025,5,5,0,0,0), "Torino", null, service );
+
             //assign
             CatERing.getInstance().getKitchenTaskManager().assignTask(t1, ks);
+            CatERing.getInstance().getKitchenTaskManager().assignTask(t2, ks);
+
 
             System.out.println("Kitchen Shift:\n" + ks.getTaskList().toString());
             System.out.println("modified task: "+ t1);
@@ -66,4 +71,5 @@ public class TestTask5a2{
         }
     }
 }
+
 

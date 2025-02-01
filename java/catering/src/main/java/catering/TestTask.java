@@ -28,8 +28,6 @@ import java.util.Map;
 public class TestTask{
     public static void main(String[] args) {
         try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
             System.out.println("TEST FAKE LOGIN");
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
@@ -37,7 +35,7 @@ public class TestTask{
             System.out.println("\nTEST CREATE SUMMARY SHEET");
             EventInfo event = CatERing.getInstance().getEventManager().getEventInfo().get(0);
             ServiceInfo service = event.getServices().get(0);
-            System.out.println("MENUUUU" + service.getMenu().testString());
+            System.out.println("MENU" + service.getMenu().testString());
 
             SummarySheet s = CatERing.getInstance().getKitchenTaskManager().createNewSheet(service);
             System.out.println(s.testString());
@@ -58,8 +56,6 @@ public class TestTask{
 
             System.out.println("\nTEST ASSIGN TASK");
             KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 12, 17, 0, 0), LocalDateTime.of(2025, 1, 12, 20,0,0) ,null, "Torino", null, service );
-            //KitchenShift ks = new KitchenShift( LocalDateTime.of(2025, 1, 12, 17, 0, 0), LocalDateTime.of(2025, 1, 12, 20,0,0) ,null, "Torino", null, service );
-            //KitchenShift ks = new KitchenShift(null, null, null, "Torino", null, service );
             CatERing.getInstance().getKitchenTaskManager().assignTask(t1, ks);
             System.out.println(ks);
 
@@ -67,47 +63,6 @@ public class TestTask{
             ArrayList<KitchenShift> shifts = service.getKitchenShifts();
             for(KitchenShift shift: shifts)
                 System.out.println(shift);
-
-/*
-            System.out.println("\nTEST GET EVENT INFO");
-            ObservableList<EventInfo> events = CatERing.getInstance().getEventManager().getEventInfo();
-            for (EventInfo e: events) {
-                System.out.println(e);
-                for (ServiceInfo s: e.getServices()) {
-                    System.out.println("\t" + s);
-                }
-            }
-            System.out.println("");
-
-            System.out.println("\nTEST GET RECIPES AND INSERT ITEM IN SECTION");
-            ObservableList<Recipe> recipes = CatERing.getInstance().getRecipeManager().getRecipes();
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(0), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(1), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(2), antipasti);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(6), secondi);
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(7), secondi);
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST INSERT FREE ITEM");
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(3));
-            CatERing.getInstance().getMenuManager().insertItem(recipes.get(4));
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST EDIT FEATURES");
-            Map<String, Boolean> f = CatERing.getInstance().getMenuManager().getCurrentMenu().getFeatures();
-            String[] fNames = f.keySet().toArray(new String[0]);
-            boolean[] vals = new boolean[fNames.length];
-            Arrays.fill(vals, true);
-            CatERing.getInstance().getMenuManager().setAdditionalFeatures(fNames, vals);
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST EDIT TITLE");
-            CatERing.getInstance().getMenuManager().changeTitle("Titolo Nuovo");
-            System.out.println(m.testString());
-
-            System.out.println("\nTEST PUBLISH");
-            CatERing.getInstance().getMenuManager().publish();
-            System.out.println(m.testString());*/
 
         } catch (UseCaseLogicException | SheetException e) {
             System.out.println("Errore di logica nello use case");

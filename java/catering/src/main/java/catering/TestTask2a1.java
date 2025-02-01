@@ -29,8 +29,6 @@ import java.util.Map;
 public class TestTask2a1{
     public static void main(String[] args) {
         try {
-            /* System.out.println("TEST DATABASE CONNECTION");
-            PersistenceManager.testSQLConnection();*/
             System.out.println("TEST FAKE LOGIN");
             CatERing.getInstance().getUserManager().fakeLogin("Lidia");
             System.out.println(CatERing.getInstance().getUserManager().getCurrentUser());
@@ -41,6 +39,7 @@ public class TestTask2a1{
             SummarySheet s = CatERing.getInstance().getKitchenTaskManager().createNewSheet(service);
             System.out.println(s.testString());
 
+            //delete task con task preso da DB
             System.out.println("\nTEST REMOVE TASK");
             ArrayList<Task> tasks = s.getTaskList();
             CatERing.getInstance().getKitchenTaskManager().deleteTask(tasks.get(0));
@@ -48,6 +47,7 @@ public class TestTask2a1{
             CatERing.getInstance().getKitchenTaskManager().deleteTask(tasks.get(3));
             System.out.println(s.testString());
 
+            //delete task con task creato
             System.out.println("\nTEST ADD AND REMOVE TASK");
             KitchenJob kj1 = CatERing.getInstance().getRecipeManager().getRecipes().get(0);
             Task t1 = CatERing.getInstance().getKitchenTaskManager().createTask(kj1);

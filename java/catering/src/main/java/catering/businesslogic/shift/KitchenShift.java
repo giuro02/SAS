@@ -66,6 +66,7 @@ public class KitchenShift extends Shift {
         }
 
         long difference = Duration.between (this.getStartTime(),this.getEndTime()).toMinutes();
+
         return difference >= estimatedTime;
     }
 
